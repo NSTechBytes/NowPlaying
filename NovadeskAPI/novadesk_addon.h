@@ -41,6 +41,7 @@ struct NovadeskHostAPI {
     void (*PushBool)(novadesk_context ctx, int value);
     void (*PushNull)(novadesk_context ctx);
     void (*PushObject)(novadesk_context ctx);
+    void (*PushArray)(novadesk_context ctx);
 
     /** Retrieve arguments from JavaScript */
     double (*GetNumber)(novadesk_context ctx, int index);
@@ -67,6 +68,8 @@ struct NovadeskHostAPI {
     /** JavaScript Callbacks */
     void* (*JsGetFunctionPtr)(novadesk_context ctx, int index);
     void (*JsCallFunction)(novadesk_context ctx, void* funcPtr, int nargs);
+    void (*JsCallFunctionNoArgs)(novadesk_context ctx, void* funcPtr);
+    void (*ArrayPushObject)(novadesk_context ctx);
 };
 
 // Function signatures for the DLL entry points
