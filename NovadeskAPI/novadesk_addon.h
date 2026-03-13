@@ -55,6 +55,9 @@ struct NovadeskHostAPI {
     int (*IsFunction)(novadesk_context ctx, int index);
     int (*IsNull)(novadesk_context ctx, int index);
 
+    /** Object Properties */
+    int (*GetProperty)(novadesk_context ctx, int objIndex, const char* name);
+
     /** Stack & Error Control */
     int (*GetTop)(novadesk_context ctx);
     void (*Pop)(novadesk_context ctx);
@@ -198,6 +201,8 @@ namespace novadesk {
         bool IsObject(int idx) { return m_host->IsObject(m_ctx, idx) != 0; }
         bool IsFunction(int idx) { return m_host->IsFunction(m_ctx, idx) != 0; }
         bool IsNull(int idx) { return m_host->IsNull(m_ctx, idx) != 0; }
+
+        bool GetProperty(int objIndex, const char* name) { return m_host->GetProperty(m_ctx, objIndex, name) != 0; }
 
         double GetNumber(int idx) { return m_host->GetNumber(m_ctx, idx); }
         const char* GetString(int idx) { return m_host->GetString(m_ctx, idx); }

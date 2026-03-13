@@ -59,11 +59,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ImageUtils.cpp" />
+    <ClCompile Include="MediaController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ImageUtils.h" />
+    <ClInclude Include="MediaController.h" />
     <ClInclude Include="..\NovadeskAPI\novadesk_addon.h" />
   </ItemGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>gdiplus.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="NowPlaying.rc" />
   </ItemGroup>

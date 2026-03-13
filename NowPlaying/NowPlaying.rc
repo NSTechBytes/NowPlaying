@@ -2,8 +2,8 @@
 #include "winres.h"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 2,0,0,0
+ PRODUCTVERSION 2,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -19,13 +19,13 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "OfficialNovadesk"
-            VALUE "FileDescription", "MyPlugin Addon"
-            VALUE "FileVersion", "1.0.0.0"
-            VALUE "InternalName", "MyPlugin.dll"
+            VALUE "FileDescription", "NowPlaying Addon"
+            VALUE "FileVersion", "2.0.0.0"
+            VALUE "InternalName", "NowPlaying.dll"
             VALUE "LegalCopyright", "Copyright (C) 2026 OfficialNovadesk"
-            VALUE "OriginalFilename", "MyPlugin.dll"
-            VALUE "ProductName", "Novadesk Addon"
-            VALUE "ProductVersion", "1.0.0.0"
+            VALUE "OriginalFilename", "NowPlaying.dll"
+            VALUE "ProductName", "NowPlaying Addon"
+            VALUE "ProductVersion", "2.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
