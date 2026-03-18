@@ -61,15 +61,23 @@ void MediaController::WorkerThread()
 
     while (true)
     {
-        std::unique_lock<std::mutex> lock(m_actionMutex);
-        m_actionCv.wait_until(lock, nextRefresh, [this] { return m_stop || !m_actions.empty(); });
-
-        if (m_stop)
-            break;
-
-        if (!m_actions.empty())
+        std::queue<MediaActionItem> pending;
         {
-            ProcessActions();
+            std::unique_lock<std::mutex> lock(m_actionMutex);
+            m_actionCv.wait_until(lock, nextRefresh, [this] { return m_stop || !m_actions.empty(); });
+
+            if (m_stop)
+                break;
+
+            if (!m_actions.empty())
+            {
+                std::swap(pending, m_actions);
+            }
+        }
+
+        if (!pending.empty())
+        {
+            ProcessActions(pending);
         }
 
         auto now = std::chrono::steady_clock::now();
@@ -279,14 +287,8 @@ void MediaController::UpdateCover(const winrt::hstring& playerAppId, const winrt
     }
 }
 
-void MediaController::ProcessActions()
+void MediaController::ProcessActions(std::queue<MediaActionItem> &pending)
 {
-    std::queue<MediaActionItem> pending;
-    {
-        std::lock_guard<std::mutex> lock(m_actionMutex);
-        std::swap(pending, m_actions);
-    }
-
     auto session = m_manager ? m_manager.GetCurrentSession() : nullptr;
     if (!session) return;
 

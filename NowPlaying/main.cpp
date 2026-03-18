@@ -18,6 +18,24 @@ namespace
 
     int JsNowPlayingStats(novadesk_context ctx)
     {
+        bool includeThumbnail = true;
+        bool includeGenres = true;
+        if (g_Host->GetTop(ctx) > 0 && g_Host->IsObject(ctx, 0))
+        {
+            if (g_Host->GetProperty(ctx, 0, "includeThumbnail"))
+            {
+                if (!g_Host->IsNull(ctx, -1))
+                    includeThumbnail = g_Host->GetBool(ctx, -1) != 0;
+                g_Host->Pop(ctx);
+            }
+            if (g_Host->GetProperty(ctx, 0, "includeGenres"))
+            {
+                if (!g_Host->IsNull(ctx, -1))
+                    includeGenres = g_Host->GetBool(ctx, -1) != 0;
+                g_Host->Pop(ctx);
+            }
+        }
+
         const MediaStats stats = GetController().GetStats();
         g_Host->PushObject(ctx);
         g_Host->RegisterBool(ctx, "available", stats.available ? 1 : 0);
@@ -25,7 +43,8 @@ namespace
         g_Host->RegisterString(ctx, "artist", stats.artist.c_str());
         g_Host->RegisterString(ctx, "album", stats.album.c_str());
         g_Host->RegisterString(ctx, "title", stats.title.c_str());
-        g_Host->RegisterString(ctx, "thumbnail", stats.thumbnail.c_str());
+        if (includeThumbnail)
+            g_Host->RegisterString(ctx, "thumbnail", stats.thumbnail.c_str());
         g_Host->RegisterNumber(ctx, "duration", stats.duration);
         g_Host->RegisterNumber(ctx, "position", stats.position);
         g_Host->RegisterNumber(ctx, "progress", stats.progress);
@@ -33,7 +52,8 @@ namespace
         g_Host->RegisterNumber(ctx, "status", stats.status);
         g_Host->RegisterBool(ctx, "shuffle", stats.shuffle ? 1 : 0);
         g_Host->RegisterBool(ctx, "repeat", stats.repeat ? 1 : 0);
-        g_Host->RegisterString(ctx, "genres", stats.genres.c_str());
+        if (includeGenres)
+            g_Host->RegisterString(ctx, "genres", stats.genres.c_str());
         return 1;
     }
 
@@ -54,7 +74,7 @@ namespace
     {
         if (g_Host->GetTop(ctx) < 1 || !g_Host->IsNumber(ctx, 0))
         {
-            g_Host->ThrowError(ctx, "nowPlaying.setPosition(value[, isPercent])");
+            g_Host->ThrowError(ctx, "setPosition(value[, isPercent])");
             return 0;
         }
         int value = static_cast<int>(g_Host->GetNumber(ctx, 0));
@@ -72,7 +92,7 @@ namespace
     {
         if (g_Host->GetTop(ctx) < 1)
         {
-            g_Host->ThrowError(ctx, "nowPlaying.setShuffle(enabled)");
+            g_Host->ThrowError(ctx, "setShuffle(enabled)");
             return 0;
         }
         bool enabled = g_Host->GetBool(ctx, 0) != 0;
@@ -85,7 +105,7 @@ namespace
     {
         if (g_Host->GetTop(ctx) < 1 || !g_Host->IsNumber(ctx, 0))
         {
-            g_Host->ThrowError(ctx, "nowPlaying.setRepeat(mode)");
+            g_Host->ThrowError(ctx, "setRepeat(mode)");
             return 0;
         }
         int mode = static_cast<int>(g_Host->GetNumber(ctx, 0));
@@ -102,20 +122,18 @@ NOVADESK_ADDON_INIT(ctx, hMsgWnd, host)
 
     novadesk::Addon addon(ctx, host);
     addon.RegisterString("name", "NowPlaying");
-    addon.RegisterString("version", "2.0.0"); // Upped version
-    addon.RegisterObject("nowPlaying", [](novadesk::Addon& obj) {
-        obj.RegisterFunction("stats", JsNowPlayingStats, 0);
-        obj.RegisterFunction("backend", JsNowPlayingBackend, 0);
-        obj.RegisterFunction("play", JsNowPlayingPlay, 0);
-        obj.RegisterFunction("pause", JsNowPlayingPause, 0);
-        obj.RegisterFunction("playPause", JsNowPlayingPlayPause, 0);
-        obj.RegisterFunction("stop", JsNowPlayingStop, 0);
-        obj.RegisterFunction("next", JsNowPlayingNext, 0);
-        obj.RegisterFunction("previous", JsNowPlayingPrevious, 0);
-        obj.RegisterFunction("setPosition", JsNowPlayingSetPosition, 2);
-        obj.RegisterFunction("setShuffle", JsNowPlayingSetShuffle, 1);
-        obj.RegisterFunction("setRepeat", JsNowPlayingSetRepeat, 1);
-    });
+    addon.RegisterString("version", "2.1.0");
+    addon.RegisterFunction("stats", JsNowPlayingStats, 0);
+    addon.RegisterFunction("backend", JsNowPlayingBackend, 0);
+    addon.RegisterFunction("play", JsNowPlayingPlay, 0);
+    addon.RegisterFunction("pause", JsNowPlayingPause, 0);
+    addon.RegisterFunction("playPause", JsNowPlayingPlayPause, 0);
+    addon.RegisterFunction("stop", JsNowPlayingStop, 0);
+    addon.RegisterFunction("next", JsNowPlayingNext, 0);
+    addon.RegisterFunction("previous", JsNowPlayingPrevious, 0);
+    addon.RegisterFunction("setPosition", JsNowPlayingSetPosition, 2);
+    addon.RegisterFunction("setShuffle", JsNowPlayingSetShuffle, 1);
+    addon.RegisterFunction("setRepeat", JsNowPlayingSetRepeat, 1);
 }
 
 NOVADESK_ADDON_UNLOAD()

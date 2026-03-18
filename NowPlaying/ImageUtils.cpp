@@ -120,7 +120,6 @@ namespace ImageUtils
                 Graphics g(&b);
                 Bitmap cover(original.c_str());
                 Gdiplus::Rect r(0, 0, 300, 300);
-                // Source rect: (33, 0) size (234, 234) as per RainmeterMediaPlayer
                 g.DrawImage(&cover, r, 33, 0, 234, 234, UnitPixel);
 
                 const CLSID pngEncoderClsId = { 0x557cf406, 0x1a04, 0x11d3,{ 0x9a,0x73,0x00,0x00,0xf8,0x1e,0xf3,0x2e } };

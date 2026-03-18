@@ -1,6 +1,6 @@
 ﻿//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by MyPlugin.rc
+// Used by NowPlaying.rc
 
 #define IDS_APP_TITLE           103
 

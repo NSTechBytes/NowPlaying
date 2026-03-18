@@ -64,7 +64,7 @@ private:
     void WorkerThread();
     void UpdateData();
     void UpdateCover(const winrt::hstring& playerAppId, const winrt::GlobalSystemMediaTransportControlsSessionMediaProperties& props);
-    void ProcessActions();
+    void ProcessActions(std::queue<MediaActionItem> &pending);
 
     winrt::GlobalSystemMediaTransportControlsSessionManager m_manager{ nullptr };
     

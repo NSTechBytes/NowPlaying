@@ -2,8 +2,7 @@ import { app, addon, tray } from "novadesk";
 const tray = new tray();
 console.log("=== NowPlayingMonitor Integration (Latest API) ===");
 
-var np = addon.load("../dist/x64/Debug/NowPlaying/NowPlaying.dll");
-var nowPlaying = np.nowPlaying;
+var nowPlaying = addon.load("../dist/x64/Debug/NowPlaying/NowPlaying.dll");
 
 var id = setInterval(function () {
   console.log("NowPlaying:", JSON.stringify(nowPlaying.stats()));
